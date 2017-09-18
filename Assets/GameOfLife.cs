@@ -76,14 +76,15 @@ public class GameOfLife : MonoBehaviour {
 			Audio.PlayGameSoundAtTransform (KMSoundOverride.SoundEffect.ButtonPress, Reset.transform);
 			Reset.AddInteractionPunch ();
 			if (isActive && !isSolved && !isSubmitting) {
+				Debug.Log ("[Game of Life Cruel #" + moduleId + "] Module has been reset");
 				StartCoroutine (updateReset ());
 			}
 			return false;
 		};
 
 		Submit.OnInteract += delegate () {
-			Audio.PlayGameSoundAtTransform (KMSoundOverride.SoundEffect.ButtonPress, Reset.transform);
-			Reset.AddInteractionPunch ();
+			Audio.PlayGameSoundAtTransform (KMSoundOverride.SoundEffect.ButtonPress, Submit.transform);
+			Submit.AddInteractionPunch ();
 			if (isActive && !isSolved && !isSubmitting) {
 				StartCoroutine (handleSubmit ());
 			}
@@ -243,7 +244,6 @@ public class GameOfLife : MonoBehaviour {
 	// perform a reset to initial state
 	private IEnumerator updateReset () {
 		
-		Debug.Log ("[Game of Life #" + moduleId + "] Module has been reset");
 		for (int r = 0; r < 48; r++) {
 			BtnColor1 [r] = BtnColor1init [r];
 			BtnColor2 [r] = BtnColor2init [r];
@@ -273,7 +273,7 @@ public class GameOfLife : MonoBehaviour {
 			}
 		}
 
-		Debug.Log ("[Game of Life #" + moduleId + "] The current state is (0 is black, 1 is white and X is colored): \n" + 
+		Debug.Log ("[Game of Life Cruel #" + moduleId + "] (0 is black, 1 is white and X is colored): \n" + 
 			debugStore[0] + " " + debugStore[1] + " " + debugStore[2] + " " + debugStore[3] + " " + debugStore[4] + " " + debugStore[5] + "\n" + 
 			debugStore[6] + " " + debugStore[7] + " " + debugStore[8] + " " + debugStore[9] + " " + debugStore[10] + " " + debugStore[11] + "\n" + 
 			debugStore[12] + " " + debugStore[13] + " " + debugStore[14] + " " + debugStore[15] + " " + debugStore[16] + " " + debugStore[17] + "\n" + 
@@ -305,13 +305,15 @@ public class GameOfLife : MonoBehaviour {
 	// submit is pressed
 	private IEnumerator handleSubmit () {
 
-		Debug.Log ("[Game of Life #" + moduleId + "] Submit has been pressed. Calculating...");
 		isSubmitting = true;
+		Debug.Log ("[Game of Life Cruel #" + moduleId + "] Submit pressed. Submitted states are:");
+		StartCoroutine (updateDebug ());
+		yield return new WaitForSeconds (TimeTiny);
 
 		// bob helps out? 
 		if ((Info.GetBatteryCount () == 6) && (Info.GetBatteryHolderCount () == 3) && (Bob == true) && ((Info.IsIndicatorPresent(KMBombInfoExtensions.KnownIndicatorLabel.BOB)) && (!Info.IsIndicatorOn(KMBombInfoExtensions.KnownIndicatorLabel.BOB)))) {
 			Module.HandlePass ();
-			Debug.Log ("[Game of Life #" + moduleId + "] Bob has assisted you. Time to party!");
+			Debug.Log ("[Game of Life Cruel #" + moduleId + "] Bob has assisted you. Time to party!");
 			for (int i = 0; i < 48; i++) {
 				BtnColor1[i] = Random.Range (2, 9);
 				BtnColor2[i] = Random.Range (2, 9);
@@ -326,8 +328,9 @@ public class GameOfLife : MonoBehaviour {
 			}
 
 			// run a reset
+			Debug.Log ("[Game of Life Cruel #" + moduleId + "] Original states were:");
 			StartCoroutine (updateReset ());
-			yield return new WaitForSeconds (TimeTiny);
+			yield return new WaitForSeconds (TimeTiny * 20);
 
 			// transform colored squares into black or white, according to rules (update rules first)
 			updateBool ();
@@ -345,77 +348,77 @@ public class GameOfLife : MonoBehaviour {
 						if (Rules [2] == false) {
 							BtnColor1 [j] = 1;
 							BtnColor2 [j] = 1;
-							Debug.Log ("[Game of Life #" + moduleId + "] Flashing red = White");
+							Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing red = White");
 						} else {
 							BtnColor1 [j] = 0;
 							BtnColor2 [j] = 0;
-							Debug.Log ("[Game of Life #" + moduleId + "] Flashing red = Black");
+							Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing red = Black");
 						}
 					} else {
 						if ((BtnColor1 [i] == 0 && BtnColor2 [i] == 3) || (BtnColor1 [i] == 3 && BtnColor2 [i] == 0)) {		// black+orange
 							if (Rules [3] == false) {
 								BtnColor1 [j] = 1;
 								BtnColor2 [j] = 1;
-								Debug.Log ("[Game of Life #" + moduleId + "] Flashing orange = White");
+								Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing orange = White");
 							} else {
 								BtnColor1 [j] = 0;
 								BtnColor2 [j] = 0;
-								Debug.Log ("[Game of Life #" + moduleId + "] Flashing orange = Black");
+								Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing orange = Black");
 							}
 						} else {
 							if ((BtnColor1 [i] == 0 && BtnColor2 [i] == 4) || (BtnColor1 [i] == 4 && BtnColor2 [i] == 0)) {		// black+yellow
 								if (Rules [4] == false) {
 									BtnColor1 [j] = 1;
 									BtnColor2 [j] = 1;
-									Debug.Log ("[Game of Life #" + moduleId + "] Flashing yellow = White");
+									Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing yellow = White");
 								} else {
 									BtnColor1 [j] = 0;
 									BtnColor2 [j] = 0;
-									Debug.Log ("[Game of Life #" + moduleId + "] Flashing yellow = Black");
+									Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing yellow = Black");
 								}
 							} else {
 								if ((BtnColor1 [i] == 0 && BtnColor2 [i] == 5) || (BtnColor1 [i] == 5 && BtnColor2 [i] == 0)) {		// black+green
 									if (Rules [5] == false) {
 										BtnColor1 [j] = 1;
 										BtnColor2 [j] = 1;
-										Debug.Log ("[Game of Life #" + moduleId + "] Flashing green = White");
+										Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing green = White");
 									} else {
 										BtnColor1 [j] = 0;
 										BtnColor2 [j] = 0;
-										Debug.Log ("[Game of Life #" + moduleId + "] Flashing green = Black");
+										Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing green = Black");
 									}
 								} else {
 									if ((BtnColor1 [i] == 0 && BtnColor2 [i] == 6) || (BtnColor1 [i] == 6 && BtnColor2 [i] == 0)) {		// black+blue
 										if (Rules [6] == false) {
 											BtnColor1 [j] = 1;
 											BtnColor2 [j] = 1;
-											Debug.Log ("[Game of Life #" + moduleId + "] Flashing blue = White");
+											Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing blue = White");
 										} else {
 											BtnColor1 [j] = 0;
 											BtnColor2 [j] = 0;
-											Debug.Log ("[Game of Life #" + moduleId + "] Flashing blue = Black");
+											Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing blue = Black");
 										}
 									} else {
 										if ((BtnColor1 [i] == 0 && BtnColor2 [i] == 7) || (BtnColor1 [i] == 7 && BtnColor2 [i] == 0)) {		// black+purple
 											if (Rules [7] == false) {
 												BtnColor1 [j] = 1;
 												BtnColor2 [j] = 1;
-												Debug.Log ("[Game of Life #" + moduleId + "] Flashing purple = White");
+												Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing purple = White");
 											} else {
 												BtnColor1 [j] = 0;
 												BtnColor2 [j] = 0;
-												Debug.Log ("[Game of Life #" + moduleId + "] Flashing purple = Black");
+												Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing purple = Black");
 											}
 										} else {
 											if ((BtnColor1 [i] == 0 && BtnColor2 [i] == 8) || (BtnColor1 [i] == 8 && BtnColor2 [i] == 0)) {		// black+brown
 												if (Rules [8] == false) {
 													BtnColor1 [j] = 1;
 													BtnColor2 [j] = 1;
-													Debug.Log ("[Game of Life #" + moduleId + "] Flashing brown = White");
+													Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing brown = White");
 												} else {
 													BtnColor1 [j] = 0;
 													BtnColor2 [j] = 0;
-													Debug.Log ("[Game of Life #" + moduleId + "] Flashing brown = Black");
+													Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing brown = Black");
 												}
 											} else {
 
@@ -425,66 +428,66 @@ public class GameOfLife : MonoBehaviour {
 													if (Rules [2] == true) {
 														BtnColor1 [j] = 1;
 														BtnColor2 [j] = 1;
-														Debug.Log ("[Game of Life #" + moduleId + "] Steady red = White");
+														Debug.Log ("[Game of Life Cruel #" + moduleId + "] Steady red = White");
 													} else {
 														BtnColor1 [j] = 0;
 														BtnColor2 [j] = 0;
-														Debug.Log ("[Game of Life #" + moduleId + "] Steady red = Black");
+														Debug.Log ("[Game of Life Cruel #" + moduleId + "] Steady red = Black");
 													}
 												} else {
 													if ((BtnColor1 [i] == 2 && BtnColor2 [i] == 3) || (BtnColor1 [i] == 3 && BtnColor2 [i] == 2)) {		// red+orange
 														if (Rules [2] == true) {
 															BtnColor1 [j] = 1;
 															BtnColor2 [j] = 1;
-															Debug.Log ("[Game of Life #" + moduleId + "] Flashing red & orange = White");
+															Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing red & orange = White");
 														} else {
 															BtnColor1 [j] = 0;
 															BtnColor2 [j] = 0;
-															Debug.Log ("[Game of Life #" + moduleId + "] Flashing red & orange = Black");
+															Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing red & orange = Black");
 														}
 													} else {
 														if ((BtnColor1 [i] == 2 && BtnColor2 [i] == 4) || (BtnColor1 [i] == 4 && BtnColor2 [i] == 2)) {		// red+yellow
 															if (Rules [3] == true) {
 																BtnColor1 [j] = 1;
 																BtnColor2 [j] = 1;
-																Debug.Log ("[Game of Life #" + moduleId + "] Flashing red & yellow = White");
+																Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing red & yellow = White");
 															} else {
 																BtnColor1 [j] = 0;
 																BtnColor2 [j] = 0;
-																Debug.Log ("[Game of Life #" + moduleId + "] Flashing red & yellow = Black");
+																Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing red & yellow = Black");
 															}
 														} else {
 															if ((BtnColor1 [i] == 2 && BtnColor2 [i] == 5) || (BtnColor1 [i] == 5 && BtnColor2 [i] == 2)) {		// red+green
 																if (Rules [5] == true) {
 																	BtnColor1 [j] = 1;
 																	BtnColor2 [j] = 1;
-																	Debug.Log ("[Game of Life #" + moduleId + "] Flashing red & green = White");
+																	Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing red & green = White");
 																} else {
 																	BtnColor1 [j] = 0;
 																	BtnColor2 [j] = 0;
-																	Debug.Log ("[Game of Life #" + moduleId + "] Flashing red & green = Black");
+																	Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing red & green = Black");
 																}
 															} else {
 																if ((BtnColor1 [i] == 2 && BtnColor2 [i] == 6) || (BtnColor1 [i] == 6 && BtnColor2 [i] == 2)) {		// red+blue
 																	if (Rules [7] == true) {
 																		BtnColor1 [j] = 1;
 																		BtnColor2 [j] = 1;
-																		Debug.Log ("[Game of Life #" + moduleId + "] Flashing red & blue = White");
+																		Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing red & blue = White");
 																	} else {
 																		BtnColor1 [j] = 0;
 																		BtnColor2 [j] = 0;
-																		Debug.Log ("[Game of Life #" + moduleId + "] Flashing red & blue = Black");
+																		Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing red & blue = Black");
 																	}
 																} else {
 																	if ((BtnColor1 [i] == 2 && BtnColor2 [i] == 7) || (BtnColor1 [i] == 7 && BtnColor2 [i] == 2)) {		// red+purple
 																		if (Rules [2] == true) {
 																			BtnColor1 [j] = 1;
 																			BtnColor2 [j] = 1;
-																			Debug.Log ("[Game of Life #" + moduleId + "] Flashing red & purple = White");
+																			Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing red & purple = White");
 																		} else {
 																			BtnColor1 [j] = 0;
 																			BtnColor2 [j] = 0;
-																			Debug.Log ("[Game of Life #" + moduleId + "] Flashing red & purple = Black");
+																			Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing red & purple = Black");
 																		}
 																	} else {
 																		if ((BtnColor1 [i] == 2 && BtnColor2 [i] == 8) || (BtnColor1 [i] == 8 && BtnColor2 [i] == 2)) {		// red+brown
@@ -492,21 +495,21 @@ public class GameOfLife : MonoBehaviour {
 																				if (Rules [8] == true) {
 																					BtnColor1 [j] = 1;
 																					BtnColor2 [j] = 1;
-																					Debug.Log ("[Game of Life #" + moduleId + "] Flashing red & brown (brown rule) = White");
+																					Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing red & brown (brown rule) = White");
 																				} else {
 																					BtnColor1 [j] = 0;
 																					BtnColor2 [j] = 0;
-																					Debug.Log ("[Game of Life #" + moduleId + "] Flashing red & brown (brown rule) = Black");
+																					Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing red & brown (brown rule) = Black");
 																				}
 																			} else {
 																				if (Rules [2] == true) {
 																					BtnColor1 [j] = 1;
 																					BtnColor2 [j] = 1;
-																					Debug.Log ("[Game of Life #" + moduleId + "] Flashing red & brown (red rule) = White");
+																					Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing red & brown (red rule) = White");
 																				} else {
 																					BtnColor1 [j] = 0;
 																					BtnColor2 [j] = 0;
-																					Debug.Log ("[Game of Life #" + moduleId + "] Flashing red & brown (red rule) = Black");
+																					Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing red & brown (red rule) = Black");
 																				}
 																			}
 																		} else {
@@ -517,55 +520,55 @@ public class GameOfLife : MonoBehaviour {
 																				if (Rules [3] == true) {
 																					BtnColor1 [j] = 1;
 																					BtnColor2 [j] = 1;
-																					Debug.Log ("[Game of Life #" + moduleId + "] Steady orange = White");
+																					Debug.Log ("[Game of Life Cruel #" + moduleId + "] Steady orange = White");
 																				} else {
 																					BtnColor1 [j] = 0;
 																					BtnColor2 [j] = 0;
-																					Debug.Log ("[Game of Life #" + moduleId + "] Steady orange = Black");
+																					Debug.Log ("[Game of Life Cruel #" + moduleId + "] Steady orange = Black");
 																				}
 																			} else {
 																				if ((BtnColor1 [i] == 3 && BtnColor2 [i] == 4) || (BtnColor1 [i] == 4 && BtnColor2 [i] == 3)) {		// orange+yellow
 																					if (Rules [4] == true) {
 																						BtnColor1 [j] = 1;
 																						BtnColor2 [j] = 1;
-																						Debug.Log ("[Game of Life #" + moduleId + "] Flashing orange & yellow = White");
+																						Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing orange & yellow = White");
 																					} else {
 																						BtnColor1 [j] = 0;
 																						BtnColor2 [j] = 0;
-																						Debug.Log ("[Game of Life #" + moduleId + "] Flashing orange & yellow = Black");
+																						Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing orange & yellow = Black");
 																					}
 																				} else {
 																					if ((BtnColor1 [i] == 3 && BtnColor2 [i] == 5) || (BtnColor1 [i] == 5 && BtnColor2 [i] == 3)) {		// orange+green
 																						if (Rules [4] == true) {
 																							BtnColor1 [j] = 1;
 																							BtnColor2 [j] = 1;
-																							Debug.Log ("[Game of Life #" + moduleId + "] Flashing orange & green = White");
+																							Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing orange & green = White");
 																						} else {
 																							BtnColor1 [j] = 0;
 																							BtnColor2 [j] = 0;
-																							Debug.Log ("[Game of Life #" + moduleId + "] Flashing orange & green = Black");
+																							Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing orange & green = Black");
 																						}
 																					} else {
 																						if ((BtnColor1 [i] == 3 && BtnColor2 [i] == 6) || (BtnColor1 [i] == 6 && BtnColor2 [i] == 3)) {		// orange+blue
 																							if (Rules [3] == true) {
 																								BtnColor1 [j] = 1;
 																								BtnColor2 [j] = 1;
-																								Debug.Log ("[Game of Life #" + moduleId + "] Flashing orange & blue = White");
+																								Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing orange & blue = White");
 																							} else {
 																								BtnColor1 [j] = 0;
 																								BtnColor2 [j] = 0;
-																								Debug.Log ("[Game of Life #" + moduleId + "] Flashing orange & blue = Black");
+																								Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing orange & blue = Black");
 																							}
 																						} else {
 																							if ((BtnColor1 [i] == 3 && BtnColor2 [i] == 7) || (BtnColor1 [i] == 7 && BtnColor2 [i] == 3)) {		// orange+purple
 																								if (Rules [2] == true) {
 																									BtnColor1 [j] = 1;
 																									BtnColor2 [j] = 1;
-																									Debug.Log ("[Game of Life #" + moduleId + "] Flashing orange & purple = White");
+																									Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing orange & purple = White");
 																								} else {
 																									BtnColor1 [j] = 0;
 																									BtnColor2 [j] = 0;
-																									Debug.Log ("[Game of Life #" + moduleId + "] Flashing orange & purple = Black");
+																									Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing orange & purple = Black");
 																								}
 																							} else {
 																								if ((BtnColor1 [i] == 3 && BtnColor2 [i] == 8) || (BtnColor1 [i] == 8 && BtnColor2 [i] == 3)) {		// orange+brown
@@ -573,21 +576,21 @@ public class GameOfLife : MonoBehaviour {
 																										if (Rules [8] == true) {
 																											BtnColor1 [j] = 1;
 																											BtnColor2 [j] = 1;
-																											Debug.Log ("[Game of Life #" + moduleId + "] Flashing orange & brown (brown rule) = White");
+																											Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing orange & brown (brown rule) = White");
 																										} else {
 																											BtnColor1 [j] = 0;
 																											BtnColor2 [j] = 0;
-																											Debug.Log ("[Game of Life #" + moduleId + "] Flashing orange & brown (brown rule) = Black");
+																											Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing orange & brown (brown rule) = Black");
 																										}
 																									} else {
 																										if (Rules [3] == true) {
 																											BtnColor1 [j] = 1;
 																											BtnColor2 [j] = 1;
-																											Debug.Log ("[Game of Life #" + moduleId + "] Flashing orange & brown (orange rule) = White");
+																											Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing orange & brown (orange rule) = White");
 																										} else {
 																											BtnColor1 [j] = 0;
 																											BtnColor2 [j] = 0;
-																											Debug.Log ("[Game of Life #" + moduleId + "] Flashing orange & brown (orange rule) = Black");
+																											Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing orange & brown (orange rule) = Black");
 																										}
 																									}
 																								} else {
@@ -598,44 +601,44 @@ public class GameOfLife : MonoBehaviour {
 																										if (Rules [4] == true) {
 																											BtnColor1 [j] = 1;
 																											BtnColor2 [j] = 1;
-																											Debug.Log ("[Game of Life #" + moduleId + "] Steady yellow = White");
+																											Debug.Log ("[Game of Life Cruel #" + moduleId + "] Steady yellow = White");
 																										} else {
 																											BtnColor1 [j] = 0;
 																											BtnColor2 [j] = 0;
-																											Debug.Log ("[Game of Life #" + moduleId + "] Steady yellow = Black");
+																											Debug.Log ("[Game of Life Cruel #" + moduleId + "] Steady yellow = Black");
 																										}
 																									} else {
 																										if ((BtnColor1 [i] == 4 && BtnColor2 [i] == 5) || (BtnColor1 [i] == 5 && BtnColor2 [i] == 4)) {		// yellow+green
 																											if (Rules [4] == true) {
 																												BtnColor1 [j] = 1;
 																												BtnColor2 [j] = 1;
-																												Debug.Log ("[Game of Life #" + moduleId + "] Flashing yellow & green = White");
+																												Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing yellow & green = White");
 																											} else {
 																												BtnColor1 [j] = 0;
 																												BtnColor2 [j] = 0;
-																												Debug.Log ("[Game of Life #" + moduleId + "] Flashing yellow & green = Black");
+																												Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing yellow & green = Black");
 																											}
 																										} else {
 																											if ((BtnColor1 [i] == 4 && BtnColor2 [i] == 6) || (BtnColor1 [i] == 6 && BtnColor2 [i] == 4)) {		// yellow+blue
 																												if (Rules [5] == true) {
 																													BtnColor1 [j] = 1;
 																													BtnColor2 [j] = 1;
-																													Debug.Log ("[Game of Life #" + moduleId + "] Flashing yellow & blue = White");
+																													Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing yellow & blue = White");
 																												} else {
 																													BtnColor1 [j] = 0;
 																													BtnColor2 [j] = 0;
-																													Debug.Log ("[Game of Life #" + moduleId + "] Flashing yellow & blue = Black");
+																													Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing yellow & blue = Black");
 																												}
 																											} else {
 																												if ((BtnColor1 [i] == 4 && BtnColor2 [i] == 7) || (BtnColor1 [i] == 7 && BtnColor2 [i] == 4)) {		// yellow+purple
 																													if (Rules [7] == true) {
 																														BtnColor1 [j] = 1;
 																														BtnColor2 [j] = 1;
-																														Debug.Log ("[Game of Life #" + moduleId + "] Flashing yellow & purple = White");
+																														Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing yellow & purple = White");
 																													} else {
 																														BtnColor1 [j] = 0;
 																														BtnColor2 [j] = 0;
-																														Debug.Log ("[Game of Life #" + moduleId + "] Flashing yellow & purple = Black");
+																														Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing yellow & purple = Black");
 																													}
 																												} else {
 																													if ((BtnColor1 [i] == 4 && BtnColor2 [i] == 8) || (BtnColor1 [i] == 8 && BtnColor2 [i] == 4)) {		// yellow+brown
@@ -643,21 +646,21 @@ public class GameOfLife : MonoBehaviour {
 																															if (Rules [8] == true) {
 																																BtnColor1 [j] = 1;
 																																BtnColor2 [j] = 1;
-																																Debug.Log ("[Game of Life #" + moduleId + "] Flashing yellow & brown (brown rule) = White");
+																																Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing yellow & brown (brown rule) = White");
 																															} else {
 																																BtnColor1 [j] = 0;
 																																BtnColor2 [j] = 0;
-																																Debug.Log ("[Game of Life #" + moduleId + "] Flashing yellow & brown (brown rule) = Black");
+																																Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing yellow & brown (brown rule) = Black");
 																															}
 																														} else {
 																															if (Rules [4] == true) {
 																																BtnColor1 [j] = 1;
 																																BtnColor2 [j] = 1;
-																																Debug.Log ("[Game of Life #" + moduleId + "] Flashing yellow & brown (yellow rule) = White");
+																																Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing yellow & brown (yellow rule) = White");
 																															} else {
 																																BtnColor1 [j] = 0;
 																																BtnColor2 [j] = 0;
-																																Debug.Log ("[Game of Life #" + moduleId + "] Flashing yellow & brown (yellow rule) = Black");
+																																Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing yellow & brown (yellow rule) = Black");
 																															}
 																														}
 																													} else {
@@ -668,33 +671,33 @@ public class GameOfLife : MonoBehaviour {
 																															if (Rules [5] == true) {
 																																BtnColor1 [j] = 1;
 																																BtnColor2 [j] = 1;
-																																Debug.Log ("[Game of Life #" + moduleId + "] Steady green = White");
+																																Debug.Log ("[Game of Life Cruel #" + moduleId + "] Steady green = White");
 																															} else {
 																																BtnColor1 [j] = 0;
 																																BtnColor2 [j] = 0;
-																																Debug.Log ("[Game of Life #" + moduleId + "] Steady green = Black");
+																																Debug.Log ("[Game of Life Cruel #" + moduleId + "] Steady green = Black");
 																															}
 																														} else {
 																															if ((BtnColor1 [i] == 5 && BtnColor2 [i] == 6) || (BtnColor1 [i] == 6 && BtnColor2 [i] == 5)) {		// green+blue
 																																if (Rules [6] == true) {
 																																	BtnColor1 [j] = 1;
 																																	BtnColor2 [j] = 1;
-																																	Debug.Log ("[Game of Life #" + moduleId + "] Flashing green & blue = White");
+																																	Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing green & blue = White");
 																																} else {
 																																	BtnColor1 [j] = 0;
 																																	BtnColor2 [j] = 0;
-																																	Debug.Log ("[Game of Life #" + moduleId + "] Flashing green & blue = Black");
+																																	Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing green & blue = Black");
 																																}
 																															} else {
 																																if ((BtnColor1 [i] == 5 && BtnColor2 [i] == 7) || (BtnColor1 [i] == 7 && BtnColor2 [i] == 5)) {		// green+purple
 																																	if (Rules [6] == true) {
 																																		BtnColor1 [j] = 1;
 																																		BtnColor2 [j] = 1;
-																																		Debug.Log ("[Game of Life #" + moduleId + "] Flashing green & purple = White");
+																																		Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing green & purple = White");
 																																	} else {
 																																		BtnColor1 [j] = 0;
 																																		BtnColor2 [j] = 0;
-																																		Debug.Log ("[Game of Life #" + moduleId + "] Flashing green & purple = Black");
+																																		Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing green & purple = Black");
 																																	}
 																																} else {
 																																	if ((BtnColor1 [i] == 5 && BtnColor2 [i] == 8) || (BtnColor1 [i] == 8 && BtnColor2 [i] == 5)) {		// green+brown
@@ -702,21 +705,21 @@ public class GameOfLife : MonoBehaviour {
 																																			if (Rules [8] == true) {
 																																				BtnColor1 [j] = 1;
 																																				BtnColor2 [j] = 1;
-																																				Debug.Log ("[Game of Life #" + moduleId + "] Flashing green & brown (brown rule) = White");
+																																				Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing green & brown (brown rule) = White");
 																																			} else {
 																																				BtnColor1 [j] = 0;
 																																				BtnColor2 [j] = 0;
-																																				Debug.Log ("[Game of Life #" + moduleId + "] Flashing green & brown (brown rule) = Black");
+																																				Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing green & brown (brown rule) = Black");
 																																			}
 																																		} else {
 																																			if (Rules [5] == true) {
 																																				BtnColor1 [j] = 1;
 																																				BtnColor2 [j] = 1;
-																																				Debug.Log ("[Game of Life #" + moduleId + "] Flashing green & brown (green rule) = White");
+																																				Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing green & brown (green rule) = White");
 																																			} else {
 																																				BtnColor1 [j] = 0;
 																																				BtnColor2 [j] = 0;
-																																				Debug.Log ("[Game of Life #" + moduleId + "] Flashing green & brown (green rule) = Black");
+																																				Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing green & brown (green rule) = Black");
 																																			}
 																																		}
 																																	} else {
@@ -727,22 +730,22 @@ public class GameOfLife : MonoBehaviour {
 																																			if (Rules [6] == true) {
 																																				BtnColor1 [j] = 1;
 																																				BtnColor2 [j] = 1;
-																																				Debug.Log ("[Game of Life #" + moduleId + "] Steady blue = White");
+																																				Debug.Log ("[Game of Life Cruel #" + moduleId + "] Steady blue = White");
 																																			} else {
 																																				BtnColor1 [j] = 0;
 																																				BtnColor2 [j] = 0;
-																																				Debug.Log ("[Game of Life #" + moduleId + "] Steady blue = Black");
+																																				Debug.Log ("[Game of Life Cruel #" + moduleId + "] Steady blue = Black");
 																																			}
 																																		} else {
 																																			if ((BtnColor1 [i] == 6 && BtnColor2 [i] == 7) || (BtnColor1 [i] == 7 && BtnColor2 [i] == 6)) {		// blue+purple
 																																				if (Rules [6] == true) {
 																																					BtnColor1 [j] = 1;
 																																					BtnColor2 [j] = 1;
-																																					Debug.Log ("[Game of Life #" + moduleId + "] Flashing blue & purple = White");
+																																					Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing blue & purple = White");
 																																				} else {
 																																					BtnColor1 [j] = 0;
 																																					BtnColor2 [j] = 0;
-																																					Debug.Log ("[Game of Life #" + moduleId + "] Flashing blue & purple = Black");
+																																					Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing blue & purple = Black");
 																																				}
 																																			} else {
 																																				if ((BtnColor1 [i] == 6 && BtnColor2 [i] == 8) || (BtnColor1 [i] == 8 && BtnColor2 [i] == 6)) {		// blue+brown
@@ -750,21 +753,21 @@ public class GameOfLife : MonoBehaviour {
 																																						if (Rules [8] == true) {
 																																							BtnColor1 [j] = 1;
 																																							BtnColor2 [j] = 1;
-																																							Debug.Log ("[Game of Life #" + moduleId + "] Flashing blue & brown (brown rule) = White");
+																																							Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing blue & brown (brown rule) = White");
 																																						} else {
 																																							BtnColor1 [j] = 0;
 																																							BtnColor2 [j] = 0;
-																																							Debug.Log ("[Game of Life #" + moduleId + "] Flashing blue & brown (brown rule) = Black");
+																																							Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing blue & brown (brown rule) = Black");
 																																						}
 																																					} else {
 																																						if (Rules [6] == true) {
 																																							BtnColor1 [j] = 1;
 																																							BtnColor2 [j] = 1;
-																																							Debug.Log ("[Game of Life #" + moduleId + "] Flashing blue & brown (blue rule) = White");
+																																							Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing blue & brown (blue rule) = White");
 																																						} else {
 																																							BtnColor1 [j] = 0;
 																																							BtnColor2 [j] = 0;
-																																							Debug.Log ("[Game of Life #" + moduleId + "] Flashing blue & brown (blue rule) = Black");
+																																							Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing blue & brown (blue rule) = Black");
 																																						}
 																																					}
 																																				} else {
@@ -775,11 +778,11 @@ public class GameOfLife : MonoBehaviour {
 																																						if (Rules [7] == true) {
 																																							BtnColor1 [j] = 1;
 																																							BtnColor2 [j] = 1;
-																																							Debug.Log ("[Game of Life #" + moduleId + "] Steady purple = White");
+																																							Debug.Log ("[Game of Life Cruel #" + moduleId + "] Steady purple = White");
 																																						} else {
 																																							BtnColor1 [j] = 0;
 																																							BtnColor2 [j] = 0;
-																																							Debug.Log ("[Game of Life #" + moduleId + "] Steady purple = Black");
+																																							Debug.Log ("[Game of Life Cruel #" + moduleId + "] Steady purple = Black");
 																																						}
 																																					} else {
 																																						if ((BtnColor1 [i] == 7 && BtnColor2 [i] == 8) || (BtnColor1 [i] == 8 && BtnColor2 [i] == 7)) {		// purple+brown
@@ -787,21 +790,21 @@ public class GameOfLife : MonoBehaviour {
 																																								if (Rules [8] == true) {
 																																									BtnColor1 [j] = 1;
 																																									BtnColor2 [j] = 1;
-																																									Debug.Log ("[Game of Life #" + moduleId + "] Flashing purple & brown (brown rule) = White");
+																																									Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing purple & brown (brown rule) = White");
 																																								} else {
 																																									BtnColor1 [j] = 0;
 																																									BtnColor2 [j] = 0;
-																																									Debug.Log ("[Game of Life #" + moduleId + "] Flashing purple & brown (brown rule) = Black");
+																																									Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing purple & brown (brown rule) = Black");
 																																								}
 																																							} else {
 																																								if (Rules [7] == true) {
 																																									BtnColor1 [j] = 1;
 																																									BtnColor2 [j] = 1;
-																																									Debug.Log ("[Game of Life #" + moduleId + "] Flashing purple & brown (purple rule) = White");
+																																									Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing purple & brown (purple rule) = White");
 																																								} else {
 																																									BtnColor1 [j] = 0;
 																																									BtnColor2 [j] = 0;
-																																									Debug.Log ("[Game of Life #" + moduleId + "] Flashing purple & brown (purple rule) = Black");
+																																									Debug.Log ("[Game of Life Cruel #" + moduleId + "] Flashing purple & brown (purple rule) = Black");
 																																								}
 																																							}
 																																						} else {
@@ -812,11 +815,11 @@ public class GameOfLife : MonoBehaviour {
 																																								if (Rules [8] == true) {
 																																									BtnColor1 [j] = 1;
 																																									BtnColor2 [j] = 1;
-																																									Debug.Log ("[Game of Life #" + moduleId + "] Steady brown = White");
+																																									Debug.Log ("[Game of Life Cruel #" + moduleId + "] Steady brown = White");
 																																								} else {
 																																									BtnColor1 [j] = 0;
 																																									BtnColor2 [j] = 0;
-																																									Debug.Log ("[Game of Life #" + moduleId + "] Steady brown = Black");
+																																									Debug.Log ("[Game of Life Cruel #" + moduleId + "] Steady brown = Black");
 																																								}
 																																							} 
 																																						}
@@ -858,6 +861,7 @@ public class GameOfLife : MonoBehaviour {
 
 			// update squares to show state of colors fixed, then wait for sneak
 			StartCoroutine (updateSquares ());
+			Debug.Log ("[Game of Life Cruel #" + moduleId + "] Colored square states:");
 			StartCoroutine (updateDebug ());
 			yield return new WaitForSeconds (TimeSneak);
 
@@ -874,7 +878,7 @@ public class GameOfLife : MonoBehaviour {
 					int l = k;
 					nCount [l] = 0;
 					// top left
-					if (k - 7 < 0) {
+					if ((k - 7 < 0) || (k %6 == 0)) {
 					} else {
 						if (BtnColorStore [(k - 7)].Equals (Colors [1])) {
 							nCount [l]++;
@@ -888,28 +892,28 @@ public class GameOfLife : MonoBehaviour {
 						}
 					}
 					// top right
-					if (k - 5 < 0) {
+					if ((k - 5 < 0) || (k %6 == 5)) {
 					} else {
 						if (BtnColorStore [(k - 5)].Equals (Colors [1])) {
 							nCount [l]++;
 						}
 					}
 					// left
-					if (k - 1 < 0) {
+					if ((k - 1 < 0) || (k %6 == 0)) {
 					} else {
 						if (BtnColorStore [(k - 1)].Equals (Colors [1])) {
 							nCount [l]++;
 						}
 					}
 					// right
-					if (k + 1 > 47) {
+					if ((k + 1 > 47) || (k %6 == 5)) {
 					} else {
 						if (BtnColorStore [(k + 1)].Equals (Colors [1])) {
 							nCount [l]++;
 						}
 					}
 					// bottom left
-					if (k + 5 > 47) {
+					if ((k + 5 > 47) || (k %6 == 0)) {
 					} else {
 						if (BtnColorStore [(k + 5)].Equals (Colors [1])) {
 							nCount [l]++;
@@ -923,7 +927,7 @@ public class GameOfLife : MonoBehaviour {
 						}
 					}
 					// bottom right
-					if (k + 7 > 47) {
+					if ((k + 7 > 47) || (k %6 == 5)) {
 					} else {
 						if (BtnColorStore [(k + 7)].Equals (Colors [1])) {
 							nCount [l]++;
@@ -962,7 +966,7 @@ public class GameOfLife : MonoBehaviour {
 				if (isSubmitting == true) {
 					//is any square wrongly submitted, then strike
 					if (BtnColor [i].material.color != ColorsSubmitted [i]) {
-						Debug.Log ("[Game of Life #" + moduleId + "] Submit pressed. First error found at square number " + (i + 1) + " in reading order");
+						Debug.Log ("[Game of Life Cruel #" + moduleId + "] First error found at square number " + (i + 1) + " in reading order. Strike");
 						Module.HandleStrike ();
 						yield return new WaitForSeconds (TimeSneak);
 						isSubmitting = false;
@@ -972,7 +976,7 @@ public class GameOfLife : MonoBehaviour {
 			}
 			//solve!
 			if (isSubmitting == true) {
-				Debug.Log ("[Game of Life #" + moduleId + "] Submit pressed. No errors found! Module passed");
+				Debug.Log ("[Game of Life Cruel #" + moduleId + "] No errors found! Module passed");
 				Module.HandlePass ();
 				isSolved = true;
 			}

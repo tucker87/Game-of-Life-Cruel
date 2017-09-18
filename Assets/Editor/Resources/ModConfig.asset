@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Name: ModConfig
   m_EditorClassIdentifier: 
   id: GameOfLifeCruel
-  title: 'Cruel Game Of Life '
-  version: 1.0c
+  title: Game of Life Cruel
+  version: 1.2c
   outputFolder: build
