@@ -1,0 +1,15 @@
+E:\Home\Documents\GitHub\Game-of-Life-Cruel\Game-of-Life-Cruel.Tests\bin\Debug\Game-of-Life-Cruel.Tests.dll
+E:\Home\Documents\GitHub\Game-of-Life-Cruel\Game-of-Life-Cruel.Tests\bin\Debug\Game-of-Life-Cruel.Tests.pdb
+E:\Home\Documents\GitHub\Game-of-Life-Cruel\Game-of-Life-Cruel.Tests\bin\Debug\xunit.abstractions.dll
+E:\Home\Documents\GitHub\Game-of-Life-Cruel\Game-of-Life-Cruel.Tests\bin\Debug\xunit.assert.dll
+E:\Home\Documents\GitHub\Game-of-Life-Cruel\Game-of-Life-Cruel.Tests\bin\Debug\xunit.core.dll
+E:\Home\Documents\GitHub\Game-of-Life-Cruel\Game-of-Life-Cruel.Tests\bin\Debug\xunit.execution.desktop.dll
+E:\Home\Documents\GitHub\Game-of-Life-Cruel\Game-of-Life-Cruel.Tests\bin\Debug\xunit.abstractions.xml
+E:\Home\Documents\GitHub\Game-of-Life-Cruel\Game-of-Life-Cruel.Tests\bin\Debug\xunit.assert.xml
+E:\Home\Documents\GitHub\Game-of-Life-Cruel\Game-of-Life-Cruel.Tests\bin\Debug\xunit.core.xml
+E:\Home\Documents\GitHub\Game-of-Life-Cruel\Game-of-Life-Cruel.Tests\bin\Debug\xunit.execution.desktop.xml
+E:\Home\Documents\GitHub\Game-of-Life-Cruel\Game-of-Life-Cruel.Tests\obj\Debug\Game-of-Life-Cruel.Tests.csprojResolveAssemblyReference.cache
+E:\Home\Documents\GitHub\Game-of-Life-Cruel\Game-of-Life-Cruel.Tests\obj\Debug\Game-of-Life-Cruel.Tests.csproj.CoreCompileInputs.cache
+E:\Home\Documents\GitHub\Game-of-Life-Cruel\Game-of-Life-Cruel.Tests\obj\Debug\Game-of-Life-Cruel.Tests.csproj.CopyComplete
+E:\Home\Documents\GitHub\Game-of-Life-Cruel\Game-of-Life-Cruel.Tests\obj\Debug\Game-of-Life-Cruel.Tests.dll
+E:\Home\Documents\GitHub\Game-of-Life-Cruel\Game-of-Life-Cruel.Tests\obj\Debug\Game-of-Life-Cruel.Tests.pdb
